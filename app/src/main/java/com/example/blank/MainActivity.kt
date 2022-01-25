@@ -23,6 +23,10 @@ import kotlinx.coroutines.*
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.IOException
+import android.view.Gravity
+
+import android.widget.FrameLayout
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 
 
 class MainActivity : AppCompatActivity() {
@@ -54,11 +58,19 @@ class MainActivity : AppCompatActivity() {
                         return StringBuffer(it.body?.string() ?: "")
                     }
                 }
-                Snackbar.make(view,
-                    //"NAME: ${allCountry.first().name} \n CAPITAL: ${allCountr.first.capital} \n Language: ${c.languages} ",
-                    run("https://www.ismycomputeronfire.com/"),
-                    Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
+
+                val httpResponse = run("https://www.ismycomputeronfire.com/")
+                if ("no" in httpResponse) {
+                    Snackbar.make(
+                        view,
+                        //"NAME: ${allCountry.first().name} \n CAPITAL: ${allCountr.first.capital} \n Language: ${c.languages} ",
+                        "no",
+                        Snackbar.LENGTH_LONG
+                    )
+                        .setAction("Action", null).show()
+                } else {
+                    throw Exception("Your computer is on fire");
+                }
             }
         }
     }
