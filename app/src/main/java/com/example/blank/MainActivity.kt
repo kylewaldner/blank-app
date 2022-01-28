@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
 
 
 
-    suspend fun makeRequest(view: View) {
+    suspend fun makeRequest(view: View, request_endpoint: String) {
         fun toast(text: String) {
             Snackbar.make(
                 view,
@@ -55,9 +55,7 @@ class MainActivity : AppCompatActivity() {
         coroutineScope {
 
             launch(Dispatchers.IO) {
-                // put the http request here
-                // its android, there are ONLY libraries
-                val text = "hi"
+
                 val client: OkHttpClient = OkHttpClient()
                 @Throws(IOException::class)
                 fun run(url: String): StringBuffer {
@@ -69,16 +67,18 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
 
-                val server_url = "http://66.115.189.191:56811/fire"
-                //val server_url = "https://www.ismycomputeronfire.com/"
+                val server_url = "http://66.115.189.161:56811/$request_endpoint"
+
                 try {
                     val httpResponse = run(server_url)
-                    if ("no" in httpResponse) {
-                        toast("you are safe :)")
-                    } else {
-                        toast("oh no your computer is on fire!!")
 
+                    val strResp = httpResponse.toString()
+                    if (strResp == "0") {
+                        toast("the counter is zero")
+                    } else {
+                        toast(strResp)
                     }
+
                 } catch (ex: Exception) {
                     toast("the server is unreachable")
                 }
@@ -103,45 +103,35 @@ class MainActivity : AppCompatActivity() {
         val tabs: TabLayout = binding.tabs
         tabs.setupWithViewPager(viewPager)
         val fab: FloatingActionButton = binding.check
+        val rst: FloatingActionButton = binding.rst
+        val inc: FloatingActionButton = binding.inc
 
         fab.setOnClickListener { view -> run {
 
 
             runBlocking {
-                makeRequest(view)
+                makeRequest(view, "status")
             }
+        }
+
+        }
+
+        rst.setOnClickListener { view -> run {
 
 
-//            val countryRequest = retroservice.listCountries()
-//            countryRequest.enqueue(object : Callback<List<Country>> {
-//                override fun onResponse(call: Call<List<Country>>, response: Response<List<Country>>) {
-//                    val allCountry = response.body()
-//
-//                    Snackbar.make(view,
-//                        //"NAME: ${allCountry.first().name} \n CAPITAL: ${allCountr.first.capital} \n Language: ${c.languages} ",
-//                        "hello world",
-//                        Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show()
-//
-////                    for (c in allCountry!!)
-//////                        Snackbar.make(view, "NAME: ${c.name} \n CAPITAL: ${c.capital} \n Language: ${c.languages} ", Snackbar.LENGTH_LONG)
-//////                            .setAction("Action", null).show()
-////                        Log.v(
-////                            MainActivity::class.simpleName,
-////                            "NAME: ${c.name} \n CAPITAL: ${c.capital} \n Language: ${c.languages} "
-////                        )
-//
-//                }
-//
-//
-//                override fun onFailure(call: Call<List<Country>>, t: Throwable) {
-////                    Log.i(MainActivity::class.simpleName, "on FAILURE!!!!")
-//                }
-//
-//            })
-//            val a = 2
-//            Snackbar.make(view, "Replace with your own action 1 asdf", Snackbar.LENGTH_LONG)
-//                .setAction("Action", null).show()
+            runBlocking {
+                makeRequest(view, "reset")
+            }
+        }
+
+        }
+
+        inc.setOnClickListener { view -> run {
+
+
+            runBlocking {
+                makeRequest(view, "increment")
+            }
         }
 
         }

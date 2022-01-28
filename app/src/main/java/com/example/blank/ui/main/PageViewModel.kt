@@ -11,7 +11,12 @@ class PageViewModel : ViewModel() {
 
     private val _index = MutableLiveData<Int>()
     val text: LiveData<String> = Transformations.map(_index) {
-        "click on the button to see if your computer is on fire"
+        if (it == 1) {
+            "click on the right to see the current count, click on the middle button to reset the count to zero, and click on the left button the increment the count"
+        } else {
+            "page $it"
+        }
+
     }
 
     fun setIndex(index: Int) {
