@@ -41,7 +41,17 @@ class MainActivity : AppCompatActivity() {
 
     val retroservice = retrofitclient.create(CountriesService::class.java)
 
+
+
     suspend fun makeRequest(view: View) {
+        fun toast(text: String) {
+            Snackbar.make(
+                view,
+
+                text,
+                Snackbar.LENGTH_LONG
+            ).setAction("Action", null).show()
+        }
         coroutineScope {
 
             launch(Dispatchers.IO) {
@@ -59,18 +69,20 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
 
-                val httpResponse = run("https://www.ismycomputeronfire.com/")
-                if ("no" in httpResponse) {
-                    Snackbar.make(
-                        view,
-                        //"NAME: ${allCountry.first().name} \n CAPITAL: ${allCountr.first.capital} \n Language: ${c.languages} ",
-                        "no",
-                        Snackbar.LENGTH_LONG
-                    )
-                        .setAction("Action", null).show()
-                } else {
-                    throw Exception("Your computer is on fire");
+                val server_url = "http://66.115.189.191:56811/fire"
+                //val server_url = "https://www.ismycomputeronfire.com/"
+                try {
+                    val httpResponse = run(server_url)
+                    if ("no" in httpResponse) {
+                        toast("you are safe :)")
+                    } else {
+                        toast("oh no your computer is on fire!!")
+
+                    }
+                } catch (ex: Exception) {
+                    toast("the server is unreachable")
                 }
+
             }
         }
     }
