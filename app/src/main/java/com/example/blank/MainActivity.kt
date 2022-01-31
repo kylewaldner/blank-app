@@ -67,7 +67,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
 
-                val server_url = "http://66.115.189.161:56811/$request_endpoint"
+                val server_url = "http://66.115.189.211:56811/$request_endpoint"
 
                 try {
                     val httpResponse = run(server_url)
